@@ -12,4 +12,8 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::view('manage-plans', 'manage-plans')
+    ->middleware(['auth'])
+    ->name('manage-plans');
+
 require __DIR__.'/auth.php';
