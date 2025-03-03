@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('interval');
             $table->string('product_id')->nullable();
             $table->string('price_id')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

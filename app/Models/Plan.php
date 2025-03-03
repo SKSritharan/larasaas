@@ -18,4 +18,8 @@ class Plan extends Model
         'price_id',
         'status',
     ];
+
+    protected $casts= [
+        'status' => 'boolean',
+    ];
 }
