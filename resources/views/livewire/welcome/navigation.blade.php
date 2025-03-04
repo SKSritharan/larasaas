@@ -1,3 +1,19 @@
+<?php
+
+use App\Livewire\Actions\Logout;
+use Livewire\Volt\Component;
+
+new class extends Component {
+    /**
+     * Log the current user out of the application.
+     */
+    public function logout(Logout $logout): void
+    {
+        $logout();
+
+        $this->redirect('/', navigate: true);
+    }
+}; ?>
 <nav class="-mx-3 flex flex-1 justify-end">
     @auth
         <a
@@ -6,6 +22,7 @@
         >
             Dashboard
         </a>
+        <flux:button icon="arrow-right-start-on-rectangle" wire:click="logout" variant="subtle"/>
     @else
         <a
             href="{{ route('login') }}"
