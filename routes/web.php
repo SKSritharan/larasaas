@@ -13,7 +13,7 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 Route::view('manage-plans', 'manage-plans')
-    ->middleware(['auth'])
+    ->middleware(['auth', 'can:view all plans'])
     ->name('manage-plans');
 
 require __DIR__.'/auth.php';
