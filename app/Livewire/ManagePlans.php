@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Plan;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Stripe\Price;
@@ -19,7 +20,7 @@ class ManagePlans extends Component
     public $interval = 'month';
 
     protected $rules = [
-        'name' => 'required|string|max:255',
+        'name' => 'required|string|max:255|unique:plans',
         'description' => 'required|string',
         'amount' => 'required|numeric|min:0',
         'interval' => 'required|in:month,year',
@@ -41,7 +42,7 @@ class ManagePlans extends Component
 
         $price = Price::create([
             'product' => $plan->id,
-            'unit_amount' => $this->amount,
+            'unit_amount' => $this->amount * 100,
             'currency' => 'usd',
             'recurring' => [
                 'interval' => $this->interval,
@@ -51,6 +52,7 @@ class ManagePlans extends Component
         try {
             Plan::create([
                 'name' => $this->name,
+                'slug' => Str::slug($this->name),
                 'description' => $this->description,
                 'amount' => $this->amount,
                 'interval' => $this->interval,

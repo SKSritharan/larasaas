@@ -9,10 +9,12 @@ use Laravel\Cashier\Cashier;
 
 class CheckoutController extends Controller
 {
-    public function checkout(Plan $plan)
+    public function checkout(string $planSlug)
     {
+        $plan = Plan::where('slug', $planSlug)->first();
+
         if (!Auth::check()) {
-            return redirect()->route('register', $plan);
+            return redirect()->route('register', $planSlug);
         }
 
         if (auth()->user()->subscribedToPrice($plan->price_id)) {
@@ -24,12 +26,12 @@ class CheckoutController extends Controller
         return $user
             ->newSubscription('default', $plan->price_id)
             ->checkout([
-                'success_url' => route('checkout-success'),
+                'success_url' => route('checkout-success', $planSlug),
                 'cancel_url' => route('home'),
             ]);
     }
 
-    public function success(Request $request)
+    public function success(Request $request, string $planSlug)
     {
         $sessionId = $request->get('session_id');
 

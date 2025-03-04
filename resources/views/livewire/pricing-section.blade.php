@@ -87,7 +87,7 @@
                             Custom integrations
                         </li>
                     </ul>
-                    <a href="{{route('checkout', $plan)}}"
+                    <a href="{{route('checkout', $plan->slug)}}"
                        class="mt-8 block rounded-md bg-[#FF2D20] px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-white hover:text-[#FF2D20] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF2D20] sm:mt-10">
                         Get Started Now
                     </a>

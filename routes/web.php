@@ -10,7 +10,7 @@ Route::view('/', 'welcome')
     ->name('home');
 
 Route::middleware('guest')->group(function () {
-    Volt::route('register/{plan}', 'pages.auth.register')
+    Volt::route('register/{planSlug}', 'pages.auth.register')
         ->name('register');
 
     Volt::route('login', 'pages.auth.login')
@@ -50,9 +50,9 @@ Route::middleware([Subscribed::class])->group(function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('checkout/plan/{plan}', [CheckoutController::class, 'checkout'])
+    Route::get('plan/{planSlug}', [CheckoutController::class, 'checkout'])
         ->name('checkout');
 
-    Route::get('checkout/plan/success', [CheckoutController::class, 'success'])
+    Route::get('plan/{planSlug}/success', [CheckoutController::class, 'success'])
         ->name('checkout-success');
 })->middleware(['auth']);

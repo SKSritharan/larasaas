@@ -17,10 +17,10 @@ new #[Layout('layouts.register')] class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
 
-    public function mount($plan)
+    public function mount(string $planSlug)
     {
         try {
-            $this->plan = $plan;
+            $this->plan = Plan::where('slug', $planSlug)->firstOrFail();
         } catch (Exception $e) {
             throw new NotFoundHttpException();
         }
@@ -45,7 +45,7 @@ new #[Layout('layouts.register')] class extends Component {
 
         Auth::login($user);
 
-        redirect(route('checkout', $this->plan));
+        redirect(route('checkout', $this->plan->slug));
     }
 }; ?>
 
