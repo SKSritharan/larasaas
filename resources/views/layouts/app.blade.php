@@ -18,7 +18,6 @@
         <div class="min-h-screen bg-gray-100">
             <livewire:layout.navigation />
 
-
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow-sm">
@@ -33,6 +32,11 @@
                 {{ $slot }}
             </main>
         </div>
+
+        @persist('custom-toast')
+            <livewire:custom-toast/>
+        @endpersist
+
         @fluxScripts
     </body>
 </html>

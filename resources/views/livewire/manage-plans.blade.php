@@ -1,16 +1,4 @@
 <div>
-    <div class="z-50 fixed top-1 right-0 p-4 space-y-2" x-data="{show: true}">
-        @if(session()->has('success'))
-            <div class="font-bold text-green-500 bg-green-100 p-2 rounded-lg" role="alert" x-show="show" x-cloak x-init="setTimeout(() => show = false, 5000)">
-                {{ session()->get('success') }}
-            </div>
-        @endif
-        @if(session()->has('error'))
-            <div class="font-bold text-red-500 bg-red-100 p-2 rounded-lg" role="alert" x-show="show" x-cloak x-init="setTimeout(() => show = false, 5000)">
-                {{ session()->get('error') }}
-            </div>
-        @endif
-    </div>
     <div class="bg-white shadow-sm overflow-hidden rounded-lg p-6 mb-6">
         <div class="mb-4">
             <h2 class="font-semibold text-md text-gray-800 leading-tight">

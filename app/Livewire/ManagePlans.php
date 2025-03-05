@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Plan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -59,9 +60,19 @@ class ManagePlans extends Component
                 'product_id' => $plan->id,
                 'price_id' => $price->id,
             ]);
-            session()->flash('success', 'Plan created successfully.');
+
+            $this->dispatch('notify',
+                variant: 'success',
+                message: 'Plan created successfully.',
+            );
+
         } catch (\Exception $e) {
-            session()->flash('error', 'Something went wrong! Please try again.');
+            Log::error($e);
+
+            $this->dispatch('notify',
+                varient: 'danger',
+                message: 'Something went wrong',
+            );
         }
 
         $this->reset();
@@ -71,9 +82,17 @@ class ManagePlans extends Component
     {
         try {
             $plan->delete();
-            session()->flash('success', 'Plan deleted successfully.');
+            $this->dispatch('notify',
+                variant: 'success',
+                message: 'Plan deleted successfully.',
+            );
         } catch (\Exception $e) {
-            session()->flash('error', 'Something went wrong! Please try again.');
+            Log::error($e);
+
+            $this->dispatch('notify',
+                variant: 'danger',
+                message: 'Something went wrong! Please try again.',
+            );
         }
     }
 
@@ -92,6 +111,11 @@ class ManagePlans extends Component
         $plan->update([
             'status' => !$plan->status,
         ]);
+
+        $this->dispatch('notify',
+            variant: 'success',
+            message: 'Plan status updated successfully.',
+        );
     }
 
     public function render()
