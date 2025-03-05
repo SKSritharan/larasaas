@@ -24,7 +24,7 @@ class SyncPlansCommand extends Command
     }
 
 
-    public function handle()
+    public function handle(): int
     {
         $this->info('Starting Stripe plan synchronization...');
 
@@ -87,14 +87,14 @@ class SyncPlansCommand extends Command
             $this->line("Synced Plans: <info>$syncedPlans</info>");
             $this->line("Skipped Plans: <comment>$skippedPlans</comment>");
 
-            return Command::SUCCESS;
+            return self::SUCCESS;
 
         } catch (\Stripe\Exception\ApiErrorException $e) {
             $this->error('Stripe API Error: ' . $e->getMessage());
-            return Command::FAILURE;
+            return self::FAILURE;
         } catch (\Exception $e) {
             $this->error('Synchronization failed: ' . $e->getMessage());
-            return Command::FAILURE;
+            return self::FAILURE;
         }
     }
 }
