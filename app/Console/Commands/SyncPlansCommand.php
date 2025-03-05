@@ -11,7 +11,8 @@ class SyncPlansCommand extends Command
 {
     protected $signature = 'plans:sync
                             {--force : Force sync even if there are potential issues}
-                            {--limit=100 : Limit the number of products to sync}';
+                            {--limit=100 : Limit the number of products to sync}
+                            {--all : Sync both active and inactive plans}';
 
     protected $description = 'Synchronize Stripe plans with local database';
 
@@ -23,7 +24,6 @@ class SyncPlansCommand extends Command
         $this->stripe = new StripeClient(config('cashier.secret'));
     }
 
-
     public function handle(): int
     {
         $this->info('Starting Stripe plan synchronization...');
@@ -31,9 +31,13 @@ class SyncPlansCommand extends Command
         try {
             // Prepare query parameters
             $queryParams = [
-                'active' => true,
                 'limit' => $this->option('limit')
             ];
+
+            // Add active filter only if --all is not specified
+            if (!$this->option('all')) {
+                $queryParams['active'] = true;
+            }
 
             // Fetch products from Stripe
             $products = $this->stripe->products->all($queryParams);
@@ -44,13 +48,20 @@ class SyncPlansCommand extends Command
 
             $syncedPlans = 0;
             $skippedPlans = 0;
+            $inactivePlans = 0;
 
             foreach ($products->data as $product) {
                 // Fetch prices for each product
-                $prices = $this->stripe->prices->all([
-                    'product' => $product->id,
-                    'active' => true
-                ]);
+                $priceParams = [
+                    'product' => $product->id
+                ];
+
+                // Add active filter only if --all is not specified
+                if (!$this->option('all')) {
+                    $priceParams['active'] = true;
+                }
+
+                $prices = $this->stripe->prices->all($priceParams);
 
                 foreach ($prices->data as $price) {
                     // Only process recurring prices
@@ -64,13 +75,17 @@ class SyncPlansCommand extends Command
                                 'name' => $product->name,
                                 'slug' => Str::slug($product->name),
                                 'description' => $product->description ?? null,
-                                'amount' => $price->unit_amount * 0.01, // Convert cents to dollars
+                                'amount' => $price->unit_amount / 100, // Convert cents to dollars
                                 'interval' => $price->recurring->interval,
                                 'status' => $product->active,
                             ]
                         );
 
                         $syncedPlans++;
+
+                        if (!$product->active) {
+                            $inactivePlans++;
+                        }
                     } else {
                         $skippedPlans++;
                     }
@@ -85,15 +100,20 @@ class SyncPlansCommand extends Command
             // Display summary
             $this->info("Synchronization complete!");
             $this->line("Synced Plans: <info>$syncedPlans</info>");
+
+            if ($this->option('all')) {
+                $this->line("Synced Inactive Plans: <comment>$inactivePlans</comment>");
+            }
+
             $this->line("Skipped Plans: <comment>$skippedPlans</comment>");
 
             return self::SUCCESS;
 
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            $this->error('Stripe API Error: ' . $e->getMessage());
+            $this->error('Stripe API Error: '.$e->getMessage());
             return self::FAILURE;
         } catch (\Exception $e) {
-            $this->error('Synchronization failed: ' . $e->getMessage());
+            $this->error('Synchronization failed: '.$e->getMessage());
             return self::FAILURE;
         }
     }
