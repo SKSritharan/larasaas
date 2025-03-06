@@ -6,20 +6,16 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Subscribed
+class ActiveSubscription
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user()) {
-            return redirect('/login');
-        }
-
         if ($request->user()->hasRole('admin')){
             return $next($request);
         }
 
-        if (! ($request->user()->subscription())) {
-            return redirect('/');
+        if (! ($request->user()->subscription()->active())) {
+            return redirect('/billing');
         }
 
         return $next($request);

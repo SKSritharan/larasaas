@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Middleware\ActiveSubscription;
 use App\Http\Middleware\Subscribed;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
         ->name('password.confirm');
 });
 
-Route::middleware([Subscribed::class])->group(function () {
+Route::middleware([Subscribed::class, ActiveSubscription::class])->group(function () {
     Route::view('dashboard', 'dashboard')
         ->middleware(['auth', 'verified'])
         ->name('dashboard');
@@ -44,14 +45,14 @@ Route::middleware([Subscribed::class])->group(function () {
         ->middleware(['auth'])
         ->name('profile');
 
-    Route::view('billing', 'billing')
-        ->middleware(['auth'])
-        ->name('billing');
-
     Route::view('manage-plans', 'manage-plans')
         ->middleware(['auth', 'can:view all plans'])
         ->name('manage-plans');
 });
+
+Route::view('billing', 'billing')
+    ->middleware(['auth', Subscribed::class])
+    ->name('billing');
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('plan/{planSlug}', [CheckoutController::class, 'checkout'])
