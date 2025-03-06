@@ -28,6 +28,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'delete plan'],
             ['name' => 'view plan'],
             ['name' => 'view all plans'],
+            ['name' => 'create feature'],
+            ['name' => 'edit feature'],
+            ['name' => 'delete feature'],
+            ['name' => 'view feature'],
+            ['name' => 'view all features'],
         ];
 
         foreach ($roles as $role) {
@@ -48,5 +53,6 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole('admin');
 
+        $this->call(FeatureSeeder::class);
     }
 }

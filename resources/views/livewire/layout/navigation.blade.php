@@ -33,6 +33,13 @@ new class extends Component {
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
+                    @can('edit feature')
+                        <x-nav-link :href="route('manage-features')" :active="request()->routeIs('manage-features')"
+                                    wire:navigate>
+                            {{ __('Features') }}
+                        </x-nav-link>
+                    @endcan
+
                     @can('edit plan')
                         <x-nav-link :href="route('manage-plans')" :active="request()->routeIs('manage-plans')"
                                     wire:navigate>

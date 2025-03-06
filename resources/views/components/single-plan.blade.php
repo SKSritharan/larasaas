@@ -28,54 +28,33 @@
     </p>
     <p class="mt-6 text-base text-zinc-300">{{ $plan->description }}</p>
     <ul role="list" class="mt-8 space-y-3 text-sm text-zinc-300 sm:mt-10">
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Unlimited products
-        </li>
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Unlimited subscribers
-        </li>
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Advanced analytics
-        </li>
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Dedicated support representative
-        </li>
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Marketing automations
-        </li>
-        <li class="flex gap-x-3">
-            <svg class="h-6 w-5 flex-none text-[#FF2D20]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                      clip-rule="evenodd"/>
-            </svg>
-            Custom integrations
-        </li>
+        @php
+            $allFeatures = \App\Models\Feature::all();
+            $planFeatures = $plan->features->pluck('id')->toArray();
+        @endphp
+
+        @foreach($allFeatures as $feature)
+            <li class="flex gap-x-3">
+                @if(in_array($feature->id, $planFeatures))
+                    <svg class="h-6 w-5 flex-none text-green-600" viewBox="0 0 20 20" fill="currentColor"
+                         aria-hidden="true">
+                        <path fill-rule="evenodd"
+                              d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                    @if($plan->features->find($feature->id)->pivot->value)
+                        <span>{{ $plan->features->find($feature->id)->pivot->value }}</span>
+                    @endif
+                    {{ $feature->name }}
+                @else
+                    <svg class="h-6 w-5 flex-none text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                    {{ $feature->name }}
+                @endif
+            </li>
+        @endforeach
     </ul>
 
     @if($showButton)

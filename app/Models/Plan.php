@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Plan extends Model
 {
@@ -23,4 +24,9 @@ class Plan extends Model
     protected $casts= [
         'status' => 'boolean',
     ];
+
+    public function features(): BelongsToMany
+    {
+        return $this->belongsToMany(Feature::class)->withPivot('value');
+    }
 }

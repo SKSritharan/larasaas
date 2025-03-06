@@ -45,9 +45,13 @@ Route::middleware([Subscribed::class, ActiveSubscription::class])->group(functio
         ->middleware(['auth'])
         ->name('profile');
 
-    Route::view('manage-plans', 'manage-plans')
-        ->middleware(['auth', 'can:view all plans'])
+    Volt::route('manage-plans', 'manage-plans')
+        ->middleware(['auth', 'can:edit plan'])
         ->name('manage-plans');
+
+    Volt::route('manage-features', 'manage-features')
+        ->middleware(['auth', 'can:edit feature'])
+        ->name('manage-features');
 });
 
 Route::view('billing', 'billing')
