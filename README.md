@@ -4,8 +4,7 @@
 
 **Larasaas** is a SaaS (Software as a Service) starter kit built with Laravel. It provides a robust foundation for building SaaS applications quickly and efficiently. This boilerplate includes essential features like user authentication, subscription billing, plans management, and Stripe integration, allowing you to focus on developing your unique business logic.
 
----
-
+[![License](https://img.shields.io/github/license/SKSritharan/larasaas)](LICENSE)
 ## Features
 
 - **User Authentication**: Ready-to-use authentication system for user registration, login, and password management.
@@ -13,8 +12,6 @@
 - **Plans Management**: Create, update, and manage subscription plans.
 - **Features Management**: Define and associate features with subscription plans.
 - **Stripe Plans Synchronization**: Automatically synchronize plans and pricing with Stripe.
-
----
 
 ## Getting Started
 
@@ -96,8 +93,6 @@ Follow these steps to set up Larasaas on your local machine.
 
    Visit `http://localhost:8000` in your browser to view the application.
 
----
-
 ## Stripe Plans Synchronization
 
 To synchronize your subscription plans with Stripe, follow these steps:
@@ -121,13 +116,9 @@ To synchronize your subscription plans with Stripe, follow these steps:
 
    This command will fetch your Stripe products and prices and store them in the local database.
 
----
-
 ## Documentation
 
 For detailed documentation, including setup instructions, feature explanations, and customization guides, visit the [Larasaas Documentation](https://medium.com/@sritharansk/larasaas-saas-boilerplate).
-
----
 
 ## Contributing
 
@@ -138,25 +129,17 @@ Contributions are welcome! If you'd like to contribute to Larasaas, please follo
 3. Commit your changes and push to the branch.
 4. Submit a pull request.
 
----
-
 ## License
 
 Larasaas is open-source software licensed under the [MIT License](LICENSE).
-
----
 
 ## Support
 
 If you encounter any issues or have questions, feel free to [open an issue](https://github.com/SKSritharan/larasaas/issues) on GitHub.
 
----
-
 ## Acknowledgments
 
 - Built with [Laravel](https://laravel.com), the PHP framework for web artisans.
 - Integrated with [Stripe](https://stripe.com) for subscription billing.
-
----
 
 Happy coding! 🚀
