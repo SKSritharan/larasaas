@@ -44,6 +44,10 @@ Route::middleware([Subscribed::class])->group(function () {
         ->middleware(['auth'])
         ->name('profile');
 
+    Route::view('billing', 'billing')
+        ->middleware(['auth'])
+        ->name('billing');
+
     Route::view('manage-plans', 'manage-plans')
         ->middleware(['auth', 'can:view all plans'])
         ->name('manage-plans');

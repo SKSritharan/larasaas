@@ -17,7 +17,11 @@ new class extends Component
             'password' => ['required', 'string', 'current_password'],
         ]);
 
-        tap(Auth::user(), $logout(...))->delete();
+        $user = Auth::user();
+
+        $user->subscription()->cancelNow();
+
+        tap($user, $logout(...))->delete();
 
         $this->redirect('/', navigate: true);
     }

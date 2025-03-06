@@ -14,7 +14,7 @@ class Subscribed
             return redirect('/login');
         }
 
-        if (! ($request->user()->subscription() || $request->user()->hasRole('admin'))) {
+        if (! (($request->user()->subscription() && $request->user()->subscription()->active()) || $request->user()->hasRole('admin'))) {
             return redirect('/');
         }
 
