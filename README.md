@@ -77,11 +77,16 @@ Follow these steps to set up Larasaas on your local machine.
 
 5. **Run Migrations**
 
-   Set up the database schema by running migrations:
+   Set up the database schema & get default user, roles, and permissions by running following command:
 
    ```bash
-   php artisan migrate
+   php artisan migrate --seed
    ```
+
+    > The default admin credentials for accessing the admin panel are:
+    > Email: ```admin@admin.com```
+    > Password: ```password```
+    > Make sure to change these credentials after your initial login for security purposes.
 
 6. **Start the Development Server**
 
@@ -115,6 +120,54 @@ To synchronize your subscription plans with Stripe, follow these steps:
    ```
 
    This command will fetch your Stripe products and prices and store them in the local database.
+
+Certainly! Here's a refined and more detailed version of the Stripe Webhooks setup instructions:
+
+## Stripe Webhooks Setup
+
+To handle real-time events from Stripe, you need to set up Stripe webhooks. Follow these steps to configure and test webhooks in Larasaas:
+
+### 1. **Create a Stripe Webhook**
+
+Run the following command to create a Stripe webhook:
+
+```bash
+php artisan stripe:webhook
+```
+
+This command will create a webhook endpoint in your Stripe Dashboard and print the **Webhook Signing Secret**. Copy this secret.
+
+### 2. **Update `.env` with Webhook Secret**
+
+Add the **Webhook Signing Secret** to your `.env` file:
+
+```dotenv
+STRIPE_WEBHOOK_SECRET=your-webhook-signing-secret
+```
+
+### 3. **Listen to Stripe Events**
+
+Use the Stripe CLI to listen to events and forward them to your local development environment. Run the following command:
+
+```bash
+stripe listen --forward-to http://larasaas.test/stripe/webhook
+```
+Replace `http://larasaas.test/stripe/webhook` with your actual webhook URL.
+
+### 4. **Trigger Test Events**
+
+To test your webhook, trigger a test event using the Stripe CLI. For example, to simulate a successful payment, run:
+
+```bash
+stripe trigger payment_intent.succeeded
+```
+
+- This will send a test event to your webhook URL.
+- You can view the event details in your Stripe Dashboard under **Developers > Webhooks > Events**.
+
+### 5. **Verify Webhook Handling**
+
+- Check your Laravel logs (`storage/logs/laravel.log`) to ensure the webhook events are being handled correctly.
 
 ## Documentation
 
